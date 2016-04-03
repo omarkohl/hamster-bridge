@@ -111,10 +111,12 @@ class JiraHamsterListener(HamsterListener):
         if auto_start == 'y':
             try:
                 issue_name = self.__issue_from_fact(fact)
+                logger.debug('Issue name "%s"', issue_name)
                 if issue_name is None:
                     return
 
                 for transition in self.jira.transitions(issue_name):
+                    logger.debug('Transition "%s"', transition)
                     if transition['name'] == u'Start Progress':
                         self.jira.transition_issue(issue_name, transition['id'])
                         logger.info('Marked issue "%s" as "In Progress"', issue_name)
@@ -124,6 +126,7 @@ class JiraHamsterListener(HamsterListener):
     def on_fact_stopped(self, fact):
         time_spent = '%dm' % (fact.delta.total_seconds() / 60)
         issue_name = self.__issue_from_fact(fact)
+        logger.debug('Issue name "%s" time spent "%s"', issue_name, time_spent)
         if issue_name:
             try:
                 worklog = self.jira.add_worklog(issue_name, time_spent, comment=fact.description)
