@@ -114,7 +114,7 @@ class JiraHamsterListener(HamsterListener):
             return
         elif auto_start.lower() in ('y', 'true'):
             transition_name = u'Start Progress'
-        else
+        else:
             transition_name = unicode(auto_start, 'utf-8')
         try:
             issue_name = self.__issue_from_fact(fact)
